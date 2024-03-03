@@ -249,23 +249,25 @@
                             >
                           </div>
                           <div class="col-lg-4">
-                            <span class="order-status sent">{{}}</span>
+                            <span class="order-status sent">{{
+                              order.orderStatusName
+                            }}</span>
                           </div>
                           <div class="col-lg-4">
                             <ul class="order-preview justify-content-end">
                               <li
                                 v-if="orderDetails[order.orderId]"
-                                v-for="item in orderDetails[order.orderId]"
-                                :key="item.detailsId"
+                                v-for="detail in orderDetails[order.orderId]"
+                                :key="detail.detailsId"
                               >
                                 <a
                                   href="javascript:;"
-                                  :title="getItemName(item)"
+                                  :title="detail.name"
                                   data-toggle="tooltip"
                                   data-placement="top"
                                 >
                                   <img
-                                    src="../../assets/' + item.ImageFileName + '.jpg'"
+                                    src="../../assets/' + detail.ImageFileName + '.jpg'"
                                     alt="image"
                                 /></a>
                               </li>
@@ -809,10 +811,10 @@ export default {
   methods: {
     async fetchOrders() {
       try {
-        const memberId = 1;
+        const memberId = 3;
         const response = await fetch(`${baseAddress}/api/Orders/${memberId}`);
         const data = await response.json();
-
+        console.log(data);
         this.orders = data;
 
         //迭代orders
@@ -830,27 +832,14 @@ export default {
         );
         const data = await response.json();
         console.log(data);
-        // this.orderDetails = data;
         this.orderDetails[orderId] = data;
       } catch (error) {
         console.error("error fetching order details", error);
       }
     },
-    getItemName(item) {
-      if (item.productName !== "") {
-        return `${item.productName}`;
-      } else if (item.inspirationName !== "") {
-        return `${item.inspirationName}`;
-      } else if (item.customizedName !== "") {
-        return `${item.customizedName}`;
-      } else {
-        return "找不到產品";
-      }
-    },
   },
   mounted() {
     this.fetchOrders();
-    // this.fetchOrderDetail();
   },
 };
 </script>

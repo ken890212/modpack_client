@@ -160,8 +160,8 @@
                       :key="item.cartId"
                       class="list-group-item d-flex justify-content-between text-dark align-items-center"
                     >
-                      {{ getItemName(item) }} x {{ item.quantity }}
-                      <span>$ {{ getItemPrice(item) * item.quantity }}</span>
+                      {{ item.name }} x {{ item.quantity }}
+                      <span>$ {{ item.price * item.quantity }}</span>
                     </li>
                   </ul>
                 </div>
@@ -276,36 +276,12 @@ export default {
 
         this.cartItems = data;
         this.totalPrice = data.reduce(
-          (accumulator, item) =>
-            accumulator + this.getItemPrice(item) * item.quantity,
+          (accumulator, item) => accumulator + item.price * item.quantity,
           0
         );
         //console.log(data);
       } catch (error) {
         console.error("Error fetching cart data:", error);
-      }
-    },
-    getItemName(item) {
-      if (item.productName !== "") {
-        return `${item.productName}`;
-      } else if (item.inspirationName !== "") {
-        return `${item.inspirationName}`;
-      } else if (item.customizedName !== "") {
-        return `${item.customizedName}`;
-      } else {
-        return "找不到產品";
-      }
-    },
-
-    getItemPrice(item) {
-      if (item.productprice !== 0) {
-        return item.productprice;
-      } else if (item.inspirationprice !== 0) {
-        return item.inspirationprice;
-      } else if (item.customizedprice !== 0) {
-        return item.customizedprice;
-      } else {
-        return 0;
       }
     },
 

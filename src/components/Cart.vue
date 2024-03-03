@@ -41,12 +41,12 @@
                       alt="Image"
                   /></a>
                   <div class="media-body">
-                    <h5 class="media-title">{{ getItemName(item) }}</h5>
+                    <h5 class="media-title">{{ item.name }}</h5>
                   </div>
                 </div>
               </div>
               <div class="col-4 col-lg-2 text-center">
-                <span class="cart-item-price">{{ getItemPrice(item) }}</span>
+                <span class="cart-item-price">{{ item.price }}</span>
               </div>
               <div class="col-4 col-lg-2 text-center">
                 <div class="counter">
@@ -74,7 +74,7 @@
               </div>
               <div class="col-4 col-lg-2 text-center">
                 <span class="cart-item-price">{{
-                  getItemPrice(item) * item.quantity
+                  item.price * item.quantity
                 }}</span>
               </div>
               <!-- 刪除產品按鈕 -->
@@ -140,28 +140,6 @@ export default {
         console.error("Error fetching cart data:", error);
       }
     },
-    getItemName(item) {
-      if (item.productName !== "") {
-        return `${item.productName}`;
-      } else if (item.inspirationName !== "") {
-        return `${item.inspirationName}`;
-      } else if (item.customizedName !== "") {
-        return `${item.customizedName}`;
-      } else {
-        return "找不到產品";
-      }
-    },
-    getItemPrice(item) {
-      if (item.productprice !== 0) {
-        return item.productprice;
-      } else if (item.inspirationprice !== 0) {
-        return item.inspirationprice;
-      } else if (item.customizedprice !== 0) {
-        return item.customizedprice;
-      } else {
-        return 0;
-      }
-    },
     async deleteProduct(item) {
       try {
         const response = await fetch(
@@ -204,8 +182,7 @@ export default {
 
     updateTotalPrice() {
       this.totalPrice = this.cartItems.reduce(
-        (accumulator, item) =>
-          accumulator + this.getItemPrice(item) * item.quantity,
+        (accumulator, item) => accumulator + item.price * item.quantity,
         0
       );
     },
