@@ -23,7 +23,7 @@
               <span class="eyebrow">Quantity</span>
             </div>
             <div class="col-lg-2 text-center">
-              <span class="eyebrow">Total</span>
+              <span class="eyebrow">Subtotal</span>
             </div>
           </div>
         </div>

@@ -5,9 +5,11 @@
       <div class="row">
         <!-- navbar -->
         <nav class="navbar navbar-expand-lg navbar-dark">
-          <a href="index.html" class="navbar-brand order-1 order-lg-2"
+          <router-link
+            to="/product_listing"
+            class="navbar-brand order-1 order-lg-2"
             ><img src="../../assets/images/modpack_logo.svg" alt="Logo"
-          /></a>
+          /></router-link>
           <button
             class="navbar-toggler order-2"
             type="button"
@@ -130,7 +132,7 @@
                   aria-haspopup="true"
                   aria-expanded="false"
                 >
-                  Michael
+                  Member Name
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown-10">
                   <li><a class="dropdown-item" href="">Profile</a></li>
