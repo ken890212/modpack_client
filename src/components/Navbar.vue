@@ -29,57 +29,9 @@
             <ul class="navbar-nav mr-auto">
               <!-- 精選商品 -->
               <li class="nav-item">
-                <a href="/Home/FeaturedProducts" class="nav-link">精選商品</a>
-              </li>
-              <!-- 所有主包 -->
-              <li class="nav-item dropdown">
-                <a
-                  class="nav-link dropdown-toggle"
-                  href="#!"
-                  id="navbarDropdown-11"
-                  role="button"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                  >所有主包</a
+                <router-link to="/product_listing" class="nav-link"
+                  >精選商品</router-link
                 >
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdown-11">
-                  <li>
-                    <a href="/Home/StudentPackages" class="dropdown-item"
-                      >學生包</a
-                    >
-                  </li>
-                  <li>
-                    <a href="/Home/OfficePackages" class="dropdown-item"
-                      >辦公包</a
-                    >
-                  </li>
-                </ul>
-              </li>
-              <!-- 所有配件 -->
-              <li class="nav-item dropdown">
-                <a
-                  class="nav-link dropdown-toggle"
-                  href="#!"
-                  id="navbarDropdown-12"
-                  role="button"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                  >所有配件</a
-                >
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdown-12">
-                  <li>
-                    <a href="/Home/StudentAccessories" class="dropdown-item"
-                      >學生包</a
-                    >
-                  </li>
-                  <li>
-                    <a href="/Home/GeneralAccessories" class="dropdown-item"
-                      >通用包</a
-                    >
-                  </li>
-                </ul>
               </li>
               <!-- 限時優惠 -->
               <li class="nav-item dropdown">
@@ -107,7 +59,9 @@
                 </ul>
               </li>
               <li class="nav-item">
-                <a href="/Home/CustomizedBags" class="nav-link">客製化包包</a>
+                <router-link to="./custom_listing" class="nav-link"
+                  >客製化背包</router-link
+                >
               </li>
             </ul>
           </div>
@@ -119,7 +73,7 @@
             <ul class="navbar-nav ml-auto">
               <!-- 登入 -->
               <li class="nav-item">
-                <a href="/Account/Login" class="nav-link">Log In</a>
+                <a href="/Account/Login" class="nav-link">登入</a>
               </li>
               <!-- 會員資料 -->
               <li class="nav-item dropdown">

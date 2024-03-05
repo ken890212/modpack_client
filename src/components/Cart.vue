@@ -4,7 +4,7 @@
     <div class="container">
       <div class="row">
         <div class="col text-center">
-          <h1>Your Cart</h1>
+          <h1>購物車</h1>
         </div>
       </div>
     </div>
@@ -15,15 +15,15 @@
       <div class="row mb-0 d-none d-lg-flex">
         <div class="col">
           <div class="row pr-6">
-            <div class="col-lg-6"><span class="eyebrow">Product</span></div>
+            <div class="col-lg-6"><span class="eyebrow">產品名稱</span></div>
             <div class="col-lg-2 text-center">
-              <span class="eyebrow">Price</span>
+              <span class="eyebrow">單價</span>
             </div>
             <div class="col-lg-2 text-center">
-              <span class="eyebrow">Quantity</span>
+              <span class="eyebrow">數量</span>
             </div>
             <div class="col-lg-2 text-center">
-              <span class="eyebrow">Subtotal</span>
+              <span class="eyebrow">小計</span>
             </div>
           </div>
         </div>
@@ -37,7 +37,7 @@
                 <div class="media media-product">
                   <a href="#!"
                     ><img
-                      src="../../assets/' + item.ImageFileName + '.jpg'"
+                      :src="`../../assets/images/productImg/${item.imageFileName}`"
                       alt="Image"
                   /></a>
                   <div class="media-body">
@@ -132,7 +132,7 @@ export default {
         const memberId = 1;
         const response = await fetch(`${baseAddress}/api/Carts/${memberId}`);
         const data = await response.json();
-
+        console.log(data);
         this.cartItems = data;
         this.updateTotalPrice();
         //console.log(data);
@@ -199,13 +199,16 @@ export default {
             body: JSON.stringify({
               cartId: item.cartId,
               quantity: item.quantity,
+              imageFileName: item.imageFileName,
             }),
           }
         );
+        const result = await response.text();
         if (response.ok) {
           this.updateTotalPrice();
+          console.log("Update quantity successful:", result);
         } else {
-          console.log("Error deleting product:", response.statusText);
+          console.log("Error updating quantity:", result);
         }
       } catch (error) {
         console.error("Error updating quantity:", error);

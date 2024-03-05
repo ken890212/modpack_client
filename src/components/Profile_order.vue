@@ -86,8 +86,8 @@
                 >
                   <div class="row">
                     <div class="col-12">
-                      <h3 class="mb-0">Orders</h3>
-                      <span class="eyebrow">{{ orders.length }} Items</span>
+                      <h3 class="mb-0">訂單列表</h3>
+                      <span class="eyebrow">{{ orders.length }}筆</span>
                     </div>
                   </div>
                   <div
@@ -108,7 +108,7 @@
                               class="action eyebrow underline"
                               @click.prevent="showOrderDetails(order.orderId)"
                             >
-                              View Order
+                              訂單明細
                             </a>
                           </div>
                           <!-- 訂單狀態 -->
@@ -132,7 +132,7 @@
                                   data-placement="top"
                                 >
                                   <img
-                                    src="../../assets/' + detail.ImageFileName + '.jpg'"
+                                    :src="`../../assets/images/productImg/${detail.imageFileName}`"
                                     alt="image"
                                 /></a>
                               </li>
@@ -245,7 +245,7 @@ export default {
     return {
       orders: [],
       orderDetails: [],
-      ordersPerPage: 1,
+      ordersPerPage: 10,
       currentPage: 1,
       selectedOrderId: null,
     };
