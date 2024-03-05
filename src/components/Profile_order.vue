@@ -7,7 +7,7 @@
           <h1 class="mb-0">HI, Member Name</h1>
         </div>
         <div class="col-md-6 text-center text-md-right">
-          <a href="#!" class="btn btn-sm btn-outline-white">Sign out</a>
+          <a href="#!" class="btn btn-sm btn-outline-white">編輯</a>
         </div>
       </div>
     </div>
@@ -24,14 +24,15 @@
             role="tablist"
           >
             <a
-              class="nav-link"
+              class="nav-link active"
               data-toggle="tab"
               href="#sidebar-1-1"
               role="tab"
-              aria-controls="sidebar-1"
+              aria-controls="sidebar-1-1"
               aria-selected="false"
-              >Profile</a
+              >基本資料</a
             >
+
             <a
               class="nav-link active"
               data-toggle="tab"
@@ -39,25 +40,7 @@
               role="tab"
               aria-controls="sidebar-1-2"
               aria-selected="true"
-              >Orders</a
-            >
-            <a
-              class="nav-link"
-              data-toggle="tab"
-              href="#sidebar-1-3"
-              role="tab"
-              aria-controls="sidebar-1-3"
-              aria-selected="false"
-              >Addresses</a
-            >
-            <a
-              class="nav-link"
-              data-toggle="tab"
-              href="#sidebar-1-4"
-              role="tab"
-              aria-controls="sidebar-1-4"
-              aria-selected="false"
-              >Payments</a
+              >訂單</a
             >
             <a
               class="nav-link"
@@ -66,7 +49,7 @@
               role="tab"
               aria-controls="sidebar-1-5"
               aria-selected="false"
-              >Wishlist</a
+              >收藏</a
             >
           </div>
         </aside>

@@ -73,7 +73,7 @@
             <ul class="navbar-nav ml-auto">
               <!-- 登入 -->
               <li class="nav-item">
-                <a href="/Account/Login" class="nav-link">登入</a>
+                <a href="/Account/Login" class="nav-link">登出</a>
               </li>
               <!-- 會員資料 -->
               <li class="nav-item dropdown">
@@ -86,28 +86,18 @@
                   aria-haspopup="true"
                   aria-expanded="false"
                 >
-                  Member Name
+                  會員姓名
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown-10">
-                  <li><a class="dropdown-item" href="">Profile</a></li>
+                  <li><a class="dropdown-item" href="">基本資料</a></li>
                   <li>
                     <router-link to="/profile_order" class="dropdown-item"
-                      >Orders</router-link
-                    >
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="profile-addresses.html"
-                      >Addresses</a
-                    >
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="profile-payments.html"
-                      >Payments</a
+                      >訂單</router-link
                     >
                   </li>
                   <li>
                     <a class="dropdown-item" href="profile-wishlist.html"
-                      >Wishlist</a
+                      >收藏</a
                     >
                   </li>
                 </ul>

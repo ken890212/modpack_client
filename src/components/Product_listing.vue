@@ -74,6 +74,8 @@
                     type="checkbox"
                     class="custom-control-input"
                     id="customCheck1"
+                    v-model="selectedBrands"
+                    value="NIKE"
                   />
                   <label class="custom-control-label" for="customCheck1"
                     >NIKE</label
@@ -84,9 +86,11 @@
                     type="checkbox"
                     class="custom-control-input"
                     id="customCheck2"
+                    v-model="selectedBrands"
+                    value="The North Face"
                   />
                   <label class="custom-control-label" for="customCheck2"
-                    >THE NORTH FACE</label
+                    >The North Face</label
                   >
                 </div>
                 <div class="custom-control custom-checkbox">
@@ -94,9 +98,11 @@
                     type="checkbox"
                     class="custom-control-input"
                     id="customCheck3"
+                    v-model="selectedBrands"
+                    value="Arcteryx 始祖鳥"
                   />
                   <label class="custom-control-label" for="customCheck3"
-                    >ARCTERYX 始祖鳥</label
+                    >Arcteryx 始祖鳥</label
                   >
                 </div>
                 <div class="custom-control custom-checkbox">
@@ -104,6 +110,8 @@
                     type="checkbox"
                     class="custom-control-input"
                     id="customCheck4"
+                    v-model="selectedBrands"
+                    value="PORTER INTERNATIONAL"
                   />
                   <label class="custom-control-label" for="customCheck4"
                     >PORTER INTERNATIONAL</label
@@ -114,6 +122,8 @@
                     type="checkbox"
                     class="custom-control-input"
                     id="customCheck5"
+                    v-model="selectedBrands"
+                    value="Samsonite 新秀麗"
                   />
                   <label class="custom-control-label" for="customCheck5"
                     >Samsonite 新秀麗
@@ -142,6 +152,8 @@
                     type="checkbox"
                     class="custom-control-input"
                     id="customCheckFunction1"
+                    v-model="selectedFunctions"
+                    value="多功能"
                   />
                   <label class="custom-control-label" for="customCheckFunction1"
                     >多功能</label
@@ -152,6 +164,8 @@
                     type="checkbox"
                     class="custom-control-input"
                     id="customCheckFunction2"
+                    v-model="selectedFunctions"
+                    value="旅行"
                   />
                   <label class="custom-control-label" for="customCheckFunction2"
                     >旅行</label
@@ -162,6 +176,8 @@
                     type="checkbox"
                     class="custom-control-input"
                     id="customCheckFunction3"
+                    v-model="selectedFunctions"
+                    value="休閒"
                   />
                   <label class="custom-control-label" for="customCheckFunction3"
                     >休閒</label
@@ -172,6 +188,8 @@
                     type="checkbox"
                     class="custom-control-input"
                     id="customCheckFunction4"
+                    v-model="selectedFunctions"
+                    value="登山"
                   />
                   <label class="custom-control-label" for="customCheckFunction4"
                     >登山</label
@@ -182,6 +200,8 @@
                     type="checkbox"
                     class="custom-control-input"
                     id="customCheckFunction5"
+                    v-model="selectedFunctions"
+                    value="商務"
                   />
                   <label class="custom-control-label" for="customCheckFunction5"
                     >商務</label
@@ -211,6 +231,8 @@
                     type="checkbox"
                     class="custom-control-input"
                     id="customCheckCategory1"
+                    v-model="selectedCategory"
+                    value="後背包"
                   />
                   <label class="custom-control-label" for="customCheckCategory1"
                     >後背包</label
@@ -221,6 +243,8 @@
                     type="checkbox"
                     class="custom-control-input"
                     id="customCheckCategory2"
+                    v-model="selectedCategory"
+                    value="旅行包"
                   />
                   <label class="custom-control-label" for="customCheckCategory2"
                     >旅行包</label
@@ -231,6 +255,8 @@
                     type="checkbox"
                     class="custom-control-input"
                     id="customCheckCategory3"
+                    v-model="selectedCategory"
+                    value="公事包"
                   />
                   <label class="custom-control-label" for="customCheckCategory3"
                     >公事包</label
@@ -241,6 +267,8 @@
                     type="checkbox"
                     class="custom-control-input"
                     id="customCheckCategory4"
+                    v-model="selectedCategory"
+                    value="斜肩包"
                   />
                   <label class="custom-control-label" for="customCheckCategory4"
                     >斜肩包</label
@@ -337,6 +365,9 @@ export default {
       products: [],
       productsPerPage: 9,
       currentPage: 1,
+      selectedBrands: [],
+      selectedFunctions: [],
+      selectedCategory: [],
     };
   },
   methods: {
@@ -372,7 +403,33 @@ export default {
     paginatedProducts() {
       const startIndex = (this.currentPage - 1) * this.productsPerPage;
       const endIndex = startIndex + this.productsPerPage;
-      return this.products.slice(startIndex, endIndex);
+
+      //篩選品牌
+      const filteredByBrands = this.products.filter((product) => {
+        return (
+          this.selectedBrands.length === 0 ||
+          this.selectedBrands.some((name) => product.Name.includes(name))
+        );
+      });
+
+      //篩選功能
+      const filteredByFunctions = filteredByBrands.filter((product) => {
+        return (
+          this.selectedFunctions.length === 0 ||
+          this.selectedFunctions.some((func) => product.Name.includes(func))
+        );
+      });
+
+      //篩選類別
+      const filteredProducts = filteredByFunctions.filter((product) => {
+        return (
+          this.selectedCategory.length === 0 ||
+          this.selectedCategory.includes(product.Category)
+        );
+      });
+
+      return filteredProducts.slice(startIndex, endIndex);
+      //return this.products.slice(startIndex, endIndex);
     },
   },
 };
