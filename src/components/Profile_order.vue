@@ -115,7 +115,7 @@
                                   data-placement="top"
                                 >
                                   <img
-                                    :src="`../../assets/images/productImg/${detail.imageFileName}`"
+                                    :src="`http://localhost:7251/images/${detail.imageFile}/${detail.imageFileName}`"
                                     alt="image"
                                 /></a>
                               </li>

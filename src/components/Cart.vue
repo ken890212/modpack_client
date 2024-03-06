@@ -37,7 +37,7 @@
                 <div class="media media-product">
                   <a href="#!"
                     ><img
-                      :src="`../../assets/images/productImg/${item.imageFileName}`"
+                      :src="`http://localhost:7251/images/${item.imageFile}/${item.imageFileName}`"
                       alt="Image"
                   /></a>
                   <div class="media-body">

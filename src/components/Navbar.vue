@@ -5,11 +5,11 @@
       <div class="row">
         <!-- navbar -->
         <nav class="navbar navbar-expand-lg navbar-dark">
-          <router-link
-            to="/product_listing"
+          <a
+            href="http://localhost:7252/"
             class="navbar-brand order-1 order-lg-2"
             ><img src="../../assets/images/modpack_logo.svg" alt="Logo"
-          /></router-link>
+          /></a>
           <button
             class="navbar-toggler order-2"
             type="button"
@@ -115,8 +115,8 @@
                   data-toggle="modal"
                   data-target="#cart"
                   class="nav-link"
-                  ><span>購物車</span></RouterLink
-                >
+                  ><span>購物車</span><span></span
+                ></RouterLink>
               </li>
             </ul>
           </div>
@@ -126,6 +126,27 @@
   </header>
 </template>
 <script>
-export default {};
+var baseAddress = "http://localhost:7250";
+export default {
+  data() {
+    return {
+      cartItems: [],
+    };
+  },
+  methods: {
+    async fetchCartItems() {
+      try {
+        //memberId 要改登入會員id
+        const memberId = 1;
+        const response = await fetch(`${baseAddress}/api/Carts/${memberId}`);
+        const data = await response.json();
+        console.log(data);
+        this.cartItems = data;
+      } catch (error) {
+        console.error("Error fetching cart data:", error);
+      }
+    },
+  },
+};
 </script>
 <style></style>

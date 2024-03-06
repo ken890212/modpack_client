@@ -8,7 +8,7 @@
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="index.html">主頁</a></li>
               <li class="breadcrumb-item active" aria-current="page">
-                所有主包
+                所有靈感
               </li>
             </ol>
           </nav>
@@ -23,7 +23,7 @@
         <div class="col-lg-9">
           <div class="row gutter-2 align-items-end">
             <div class="col-md-6">
-              <h1 class="mb-0">所有主包</h1>
+              <h1 class="mb-0">所有商品</h1>
               <span class="eyebrow">{{ products.length }} products</span>
             </div>
             <div class="col-md-6 text-md-right">
@@ -297,7 +297,7 @@
                   type="text"
                   class="rangeslider"
                   name="Range Slider"
-                  value=""
+                  v-model="priceRange"
                 />
               </div>
             </div>
@@ -316,7 +316,7 @@
                 <figure class="product-image">
                   <a href="#!">
                     <img
-                      :src="`../../assets/images/productImg/${product.ImageFileName}`"
+                      :src="`http://localhost:7251/images/product/${product.ImageFileName}`"
                       alt="Image"
                     />
                   </a>
@@ -328,7 +328,7 @@
                   <div class="product-price">
                     <span>{{ product.SalePrice }}元</span>
                     <span class="product-action">
-                      <a href="#!">加入購物車</a>
+                      <a @click="" href="#!">加入購物車</a>
                     </span>
                   </div>
                   <a href="#!" class="product-like"></a>
@@ -356,6 +356,7 @@
 <script>
 var baseAddress = "http://localhost:7250";
 import Pagination from "./Pagination.vue";
+
 export default {
   components: {
     Pagination,
@@ -368,6 +369,10 @@ export default {
       selectedBrands: [],
       selectedFunctions: [],
       selectedCategory: [],
+      priceRange: {
+        min: 1000,
+        max: 9000,
+      },
     };
   },
   methods: {
@@ -421,14 +426,23 @@ export default {
       });
 
       //篩選類別
-      const filteredProducts = filteredByFunctions.filter((product) => {
+      const filteredByCategory = filteredByFunctions.filter((product) => {
         return (
           this.selectedCategory.length === 0 ||
           this.selectedCategory.includes(product.Category)
         );
       });
 
-      return filteredProducts.slice(startIndex, endIndex);
+      // 篩選價格
+      const filteredByPrice = filteredByCategory.filter((product) => {
+        const productPrice = parseFloat(product.SalePrice);
+        return (
+          productPrice >= this.priceRange.min &&
+          productPrice <= this.priceRange.max
+        );
+      });
+
+      return filteredByPrice.slice(startIndex, endIndex);
       //return this.products.slice(startIndex, endIndex);
     },
   },
