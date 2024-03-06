@@ -41,9 +41,24 @@
                 </a>
 
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                  <a class="dropdown-item" href="#!">預設排序</a>
-                  <a class="dropdown-item" href="#!">價格由高至低</a>
-                  <a class="dropdown-item" href="#!">價格由低至高</a>
+                  <a
+                    class="dropdown-item"
+                    @click="setSortOption('default')"
+                    href="#!"
+                    >預設排序</a
+                  >
+                  <a
+                    class="dropdown-item"
+                    @click="setSortOption('highToLow')"
+                    href="#!"
+                    >價格由高至低</a
+                  >
+                  <a
+                    class="dropdown-item"
+                    @click="setSortOption('lowToHigh')"
+                    href="#!"
+                    >價格由低至高</a
+                  >
                 </div>
               </div>
             </div>
@@ -371,6 +386,7 @@ export default {
       selectedBrands: [],
       selectedFunctions: [],
       selectedCategory: [],
+      sortOption: "default",
       priceRange: {
         min: 1000,
         max: 9000,
@@ -421,6 +437,9 @@ export default {
         console.log(error);
       }
     },
+    setSortOption(option) {
+      this.sortOption = option;
+    },
     setCurrentPage(page) {
       this.currentPage = page;
     },
@@ -469,8 +488,22 @@ export default {
         );
       });
 
-      return filteredByPrice.slice(startIndex, endIndex);
+      //return filteredByPrice.slice(startIndex, endIndex);
       //return this.products.slice(startIndex, endIndex);
+
+      //排序價格
+      const sortedProducts = [...filteredByPrice]; // 使用新的數組以防止修改原始數據
+      if (this.sortOption === "highToLow") {
+        sortedProducts.sort(
+          (a, b) => parseFloat(b.SalePrice) - parseFloat(a.SalePrice)
+        );
+      } else if (this.sortOption === "lowToHigh") {
+        sortedProducts.sort(
+          (a, b) => parseFloat(a.SalePrice) - parseFloat(b.SalePrice)
+        );
+      }
+
+      return sortedProducts.slice(startIndex, endIndex);
     },
   },
 };
