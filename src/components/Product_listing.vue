@@ -328,7 +328,9 @@
                   <div class="product-price">
                     <span>{{ product.SalePrice }}元</span>
                     <span class="product-action">
-                      <a @click="" href="#!">加入購物車</a>
+                      <a @click="addProductToCart(product)" href="#!"
+                        >加入購物車</a
+                      >
                     </span>
                   </div>
                   <a href="#!" class="product-like"></a>
@@ -392,6 +394,31 @@ export default {
         }
       } catch (err) {
         console.log(err);
+      }
+    },
+    async addProductToCart(product) {
+      try {
+        const response = await fetch(`${baseAddress}/api/Carts`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            cardId: 0,
+            //之後要改會員id
+            memberId: 1,
+            quantity: 1,
+            productId: product.ProductId,
+          }),
+        });
+        if (response.ok) {
+          const result = await response.text();
+          console.log("成功加入購物車", result);
+        } else {
+          console.log("Failed to add product to cart");
+        }
+      } catch (error) {
+        console.log(error);
       }
     },
     setCurrentPage(page) {

@@ -115,8 +115,8 @@
                   data-toggle="modal"
                   data-target="#cart"
                   class="nav-link"
-                  ><span>購物車</span><span></span
-                ></RouterLink>
+                  ><span>購物車</span></RouterLink
+                >
               </li>
             </ul>
           </div>
