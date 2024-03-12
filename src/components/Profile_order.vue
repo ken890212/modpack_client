@@ -4,7 +4,7 @@
     <div class="container">
       <div class="row gutter-2 gutter-md-4 align-items-end">
         <div class="col-md-6 text-center text-md-left">
-          <h1 class="mb-0">HI, Member Name</h1>
+          <h1 class="mb-0">HI, {{ memberInfo.name }}</h1>
         </div>
         <div class="col-md-6 text-center text-md-right">
           <a href="#!" class="btn btn-sm btn-outline-white">編輯</a>
@@ -24,8 +24,9 @@
             role="tablist"
           >
             <a
-              class="nav-link active"
+              class="nav-link"
               data-toggle="tab"
+              :href="`${MVC_URL}/UserProfile/Profile`"
               href="#sidebar-1-1"
               role="tab"
               aria-controls="sidebar-1-1"
@@ -113,10 +114,11 @@
                                   :title="detail.name"
                                   data-toggle="tooltip"
                                   data-placement="top"
+                                  style="color: black"
                                 >
                                   <img
-                                    :src="`http://localhost:7251/images/${detail.imageFile}/${detail.imageFileName}`"
-                                    alt="image"
+                                    :src="`${IMG_URL}/${detail.imageFile}/${detail.imageFileName}`"
+                                    alt="image" /><br
                                 /></a>
                               </li>
                             </ul>
@@ -143,6 +145,15 @@
                                   data-toggle="tab"
                                   href="#shippingDetails"
                                   >寄送資訊</a
+                                >
+                              </li>
+                              <li class="nav-item">
+                                <a
+                                  class="nav-link"
+                                  id="orderProductDetails-tab"
+                                  data-toggle="tab"
+                                  href="#orderProductDetails"
+                                  >產品明細</a
                                 >
                               </li>
                             </ul>
@@ -187,6 +198,34 @@
                                   </li>
                                 </ul>
                               </div>
+                              <div
+                                class="tab-pane fade"
+                                id="orderProductDetails"
+                              >
+                                <ul
+                                  class="order-details"
+                                  v-if="orderDetails[order.orderId]"
+                                  v-for="detail in orderDetails[order.orderId]"
+                                  :key="detail.detailsId"
+                                >
+                                  <li>
+                                    <strong>訂購產品：</strong>
+                                    {{ detail.name }}
+                                  </li>
+                                  <li>
+                                    <strong>產品單價：</strong>
+                                    {{ detail.unitPrice }}
+                                  </li>
+                                  <li>
+                                    <strong>訂購數量：</strong>
+                                    {{ detail.quantity }}
+                                  </li>
+                                  <li>
+                                    <strong>小計：</strong>
+                                    {{ detail.subtotal }}
+                                  </li>
+                                </ul>
+                              </div>
                             </div>
 
                             <button
@@ -218,26 +257,31 @@
   <!-- listing -->
 </template>
 <script>
-var baseAddress = "http://localhost:7250";
+const API_URL = import.meta.env.VITE_API_URL;
+import NavbarMixin from "./Navbar.vue";
 import Pagination from "./Pagination.vue";
 export default {
+  mixins: [NavbarMixin],
   components: {
     Pagination,
   },
   data() {
     return {
+      MVC_URL: import.meta.env.VITE_MVC_URL,
+      IMG_URL: import.meta.env.VITE_IMAGE_URL,
       orders: [],
       orderDetails: [],
       ordersPerPage: 10,
       currentPage: 1,
       selectedOrderId: null,
+      memberId: "",
+      memberInfo: [],
     };
   },
   methods: {
     async fetchOrders() {
       try {
-        const memberId = 1;
-        const response = await fetch(`${baseAddress}/api/Orders/${memberId}`);
+        const response = await fetch(`${API_URL}/Orders/${this.memberId}`);
         const data = await response.json();
         console.log(data);
         this.orders = data;
@@ -250,11 +294,20 @@ export default {
         console.error("error fetching orders", error);
       }
     },
+    async fetchMemberInfo() {
+      try {
+        const response = await fetch(`${API_URL}/Members/${this.memberId}`);
+        const memberData = await response.json();
+        this.memberInfo = memberData;
+        console.log(memberData);
+      } catch (error) {
+        console.log("Error fetching memberInfo", error);
+      }
+    },
+
     async fetchOrderDetail(orderId) {
       try {
-        const response = await fetch(
-          `${baseAddress}/api/OrderDetails/${orderId}`
-        );
+        const response = await fetch(`${API_URL}/OrderDetails/${orderId}`);
         const data = await response.json();
         console.log(data);
         this.orderDetails[orderId] = data;
@@ -292,7 +345,9 @@ export default {
     },
   },
   mounted() {
+    this.getMemberIdFromCookie();
     this.fetchOrders();
+    this.fetchMemberInfo();
   },
 };
 </script>

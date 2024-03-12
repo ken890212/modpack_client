@@ -37,7 +37,7 @@
                 <div class="media media-product">
                   <a href="#!"
                     ><img
-                      :src="`http://localhost:7251/images/${item.imageFile}/${item.imageFileName}`"
+                      :src="`${IMG_URL}/${item.imageFile}/${item.imageFileName}`"
                       alt="Image"
                   /></a>
                   <div class="media-body">
@@ -88,7 +88,7 @@
       <div class="row justify-content-between">
         <div class="col-md-6 col-lg-4">
           <div class="inline-block">
-            <span class="eyebrow">Total</span>
+            <span class="eyebrow">總計</span>
             <h4 class="h2">{{ totalPrice }}</h4>
           </div>
         </div>
@@ -109,56 +109,105 @@
           <router-link
             to="/checkout"
             class="btn btn-lg btn-primary btn-block mt-1"
-            >Checkout</router-link
+            >下單</router-link
           >
         </div>
       </div>
     </div>
   </section>
+
+  <!-- bootstrap 提視窗 -->
+  <div class="modal" id="deleteProductSuccess" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-body">
+          <p>產品成功移除購物車</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            關閉
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="deleteProductFailed" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-body">
+          <p>產品移除購物車失敗</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            關閉
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="cartEmpty" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-body">
+          <p>購物車為空，請先購物</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            關閉
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 <script>
-var baseAddress = "http://localhost:7250";
+const API_URL = import.meta.env.VITE_API_URL;
+import NavbarMixin from "./Navbar.vue";
 export default {
+  mixins: [NavbarMixin],
   data() {
     return {
+      MVC_URL: import.meta.env.VITE_MVC_URL,
+      IMG_URL: import.meta.env.VITE_IMAGE_URL,
       cartItems: [],
       totalPrice: 0,
+      memberId: "",
     };
   },
   methods: {
     async fetchCartItems() {
       try {
-        //memberId 要改登入會員id
-        const memberId = 1;
-        const response = await fetch(`${baseAddress}/api/Carts/${memberId}`);
-        const data = await response.json();
-        console.log(data);
-        this.cartItems = data;
-        this.updateTotalPrice();
-        //console.log(data);
+        const response = await fetch(`${API_URL}/Carts/${this.memberId}`);
+        if (response.status == 200) {
+          const data = await response.json();
+          console.log(data);
+          this.cartItems = data;
+          this.updateTotalPrice();
+        } else {
+          this.CartEmpty();
+        }
       } catch (error) {
         console.error("Error fetching cart data:", error);
       }
     },
     async deleteProduct(item) {
       try {
-        const response = await fetch(
-          `${baseAddress}/api/Carts/${item.cartId}`,
-          {
-            method: "DELETE",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        const response = await fetch(`${API_URL}/Carts/${item.cartId}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
 
         if (response.ok) {
           this.fetchCartItems();
+          $("#deleteProductSuccess").modal("show");
         } else {
-          console.error("Error deleting product:", response.statusText);
+          console.error("刪除失敗:", response.statusText);
+          $("deleteProductFailed").modal("show");
         }
       } catch (error) {
-        console.error("Error deleting product:", error);
+        console.error("刪除失敗:", error);
       }
     },
     incQuantity(item) {
@@ -179,30 +228,25 @@ export default {
       item.quantity = parseInt(item.quantity);
       this.updateCartQuantity(item);
     },
-
     updateTotalPrice() {
       this.totalPrice = this.cartItems.reduce(
         (accumulator, item) => accumulator + item.price * item.quantity,
         0
       );
     },
-
     async updateCartQuantity(item) {
       try {
-        const response = await fetch(
-          `${baseAddress}/api/Carts/${item.cartId}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              cartId: item.cartId,
-              quantity: item.quantity,
-              imageFileName: item.imageFileName,
-            }),
-          }
-        );
+        const response = await fetch(`${API_URL}/Carts/${item.cartId}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            cartId: item.cartId,
+            quantity: item.quantity,
+            imageFileName: item.imageFileName,
+          }),
+        });
         const result = await response.text();
         if (response.ok) {
           this.updateTotalPrice();
@@ -214,8 +258,17 @@ export default {
         console.error("Error updating quantity:", error);
       }
     },
+    CartEmpty() {
+      $("#deleteProductSuccess").modal("hide");
+      $("#cartEmpty")
+        .modal("show")
+        .on("hidden.bs.modal", () => {
+          this.$router.push("/product_listing");
+        });
+    },
   },
   mounted() {
+    this.getMemberIdFromCookie();
     this.fetchCartItems();
   },
 };

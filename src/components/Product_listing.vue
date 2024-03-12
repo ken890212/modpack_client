@@ -6,9 +6,9 @@
         <div class="col">
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-              <li class="breadcrumb-item"><a href="index.html">主頁</a></li>
+              <li class="breadcrumb-item"><a :href="`${MVC_URL}`">主頁</a></li>
               <li class="breadcrumb-item active" aria-current="page">
-                所有靈感
+                精選商品
               </li>
             </ol>
           </nav>
@@ -23,7 +23,7 @@
         <div class="col-lg-9">
           <div class="row gutter-2 align-items-end">
             <div class="col-md-6">
-              <h1 class="mb-0">所有商品</h1>
+              <h1 class="mb-0">精選商品</h1>
               <span class="eyebrow">{{ products.length }} products</span>
             </div>
             <div class="col-md-6 text-md-right">
@@ -307,13 +307,13 @@
             </span>
             <div class="d-lg-block collapse" id="collapse-price">
               <span class="widget-title">價格</span>
-              <div class="widget-content">
-                <input
-                  type="text"
-                  class="rangeslider"
-                  name="Range Slider"
-                  v-model="priceRange"
-                />
+              <div class="widget-content mt-5">
+                <Slider
+                  v-model="value"
+                  :min="0"
+                  :max="10000"
+                  :format="format"
+                ></Slider>
               </div>
             </div>
           </div>
@@ -329,9 +329,11 @@
             >
               <div class="product">
                 <figure class="product-image">
-                  <a href="#!">
+                  <a
+                    :href="`${MVC_URL}/ProductPage/Productsdetail/${product.ProductId}`"
+                  >
                     <img
-                      :src="`http://localhost:7251/images/product/${product.ImageFileName}`"
+                      :src="`${IMG_URL}/product/${product.ImageFileName}`"
                       alt="Image"
                     />
                   </a>
@@ -369,17 +371,52 @@
       </div>
     </div>
   </section>
+  <!-- Bootstrap 提視窗 -->
+  <div class="modal" id="addToCartSuccess" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-body">
+          <p>成功加入購物車</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            關閉
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="addToCartFailed" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-body">
+          <p>加入購物車失敗</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            關閉
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 <script>
-var baseAddress = "http://localhost:7250";
+const API_URL = import.meta.env.VITE_API_URL;
 import Pagination from "./Pagination.vue";
-
+import Slider from "@vueform/slider";
+import NavbarMixin from "./Navbar.vue";
 export default {
+  mixins: [NavbarMixin],
   components: {
     Pagination,
+    Slider,
   },
   data() {
     return {
+      MVC_URL: import.meta.env.VITE_MVC_URL,
+      IMG_URL: import.meta.env.VITE_IMAGE_URL,
       products: [],
       productsPerPage: 9,
       currentPage: 1,
@@ -387,16 +424,22 @@ export default {
       selectedFunctions: [],
       selectedCategory: [],
       sortOption: "default",
-      priceRange: {
-        min: 1000,
-        max: 9000,
+      // priceRange: {
+      //   min: 1000,
+      //   max: 9000,
+      // },
+      value: [0, 10000],
+      format: {
+        prefix: "$",
+        decimals: 2,
       },
+      memberId: "",
     };
   },
   methods: {
     async fetchProducts() {
       try {
-        const response = await fetch(`${baseAddress}/api/Products`, {
+        const response = await fetch(`${API_URL}/Products`, {
           method: "GET",
         });
 
@@ -408,30 +451,28 @@ export default {
         } else {
           console.log("Failed to fetch products");
         }
-      } catch (err) {
-        console.log(err);
-      }
+      } catch (err) {}
     },
     async addProductToCart(product) {
       try {
-        const response = await fetch(`${baseAddress}/api/Carts`, {
+        const response = await fetch(`${API_URL}/Carts`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            cardId: 0,
             //之後要改會員id
-            memberId: 1,
+            memberId: this.memberId,
             quantity: 1,
             productId: product.ProductId,
           }),
         });
         if (response.ok) {
           const result = await response.text();
-          console.log("成功加入購物車", result);
+          this.fetchCartItems();
+          $("#addToCartSuccess").modal("show");
         } else {
-          console.log("Failed to add product to cart");
+          $("#addToCartFailed").modal("show");
         }
       } catch (error) {
         console.log(error);
@@ -445,6 +486,7 @@ export default {
     },
   },
   mounted() {
+    this.getMemberIdFromCookie();
     this.fetchProducts();
   },
   computed: {
@@ -478,17 +520,12 @@ export default {
           this.selectedCategory.includes(product.Category)
         );
       });
-
       // 篩選價格
       const filteredByPrice = filteredByCategory.filter((product) => {
         const productPrice = parseFloat(product.SalePrice);
-        return (
-          productPrice >= this.priceRange.min &&
-          productPrice <= this.priceRange.max
-        );
+        return productPrice >= this.value[0] && productPrice <= this.value[1];
       });
 
-      //return filteredByPrice.slice(startIndex, endIndex);
       //return this.products.slice(startIndex, endIndex);
 
       //排序價格
@@ -508,4 +545,4 @@ export default {
   },
 };
 </script>
-<style></style>
+<style src="@vueform/slider/themes/default.css"></style>

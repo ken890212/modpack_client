@@ -20,17 +20,22 @@
               <h4 class="eyebrow mb-2">Quick Links</h4>
               <ul class="list-group list-group-columns">
                 <li class="list-group-item">
-                  <a href="about.html">About</a>
+                  <a :href="`${MVC_URL}/Home/AboutUs`">關於我們</a>
                 </li>
                 <li class="list-group-item">
-                  <a href="contact.html">Contact Us</a>
-                </li>
-                <li class="list-group-item"><a href="faq.html">FAQ</a></li>
-                <li class="list-group-item">
-                  <a href="javascript:;">Blog</a>
+                  <a :href="`${MVC_URL}/Home/ReachOut`">聯絡我們</a>
                 </li>
                 <li class="list-group-item">
-                  <a href="text.html">Terms of Use</a>
+                  <a :href="`${MVC_URL}/Home/FAQ`">FAQ</a>
+                </li>
+                <li class="list-group-item">
+                  <a :href="`${MVC_URL}/Home/GoBlog`">部落格</a>
+                </li>
+                <li class="list-group-item">
+                  <a :href="`${MVC_URL}/Home/PrivacyPolicy`">隱私權政策</a>
+                </li>
+                <li class="list-group-item">
+                  <a :href="`${MVC_URL}/Home/StoreLocations`">門市位置</a>
                 </li>
               </ul>
             </div>
@@ -78,6 +83,12 @@
   </footer>
 </template>
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      MVC_URL: import.meta.env.VITE_MVC_URL,
+    };
+  },
+};
 </script>
 <style></style>

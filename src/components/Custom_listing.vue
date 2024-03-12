@@ -6,7 +6,7 @@
         <div class="col">
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-              <li class="breadcrumb-item"><a href="index.html">主頁</a></li>
+              <li class="breadcrumb-item"><a :href="`${MVC_URL}`">主頁</a></li>
               <li class="breadcrumb-item active" aria-current="page">
                 客製化商品
               </li>
@@ -19,12 +19,12 @@
   <!-- listing -->
   <section class="pt-6">
     <div class="container">
-      <div class="row justify-content-end">
-        <div class="col-lg-9">
+      <div class="row justify-content">
+        <div class="col-lg-12">
           <div class="row gutter-2 align-items-end">
             <div class="col-md-6">
               <h1 class="mb-0">客製化商品</h1>
-              <span class="eyebrow"> products</span>
+              <span class="eyebrow">{{ inspirations.length }} products</span>
             </div>
             <div class="col-md-6 text-md-right">
               <div class="dropdown">
@@ -41,9 +41,24 @@
                 </a>
 
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                  <a class="dropdown-item" href="#!">預設排序</a>
-                  <a class="dropdown-item" href="#!">價格由高至低</a>
-                  <a class="dropdown-item" href="#!">價格由低至高</a>
+                  <a
+                    class="dropdown-item"
+                    @click="setSortOption('default')"
+                    href="#!"
+                    >預設排序</a
+                  >
+                  <a
+                    class="dropdown-item"
+                    @click="setSortOption('highToLow')"
+                    href="#!"
+                    >價格由高至低</a
+                  >
+                  <a
+                    class="dropdown-item"
+                    @click="setSortOption('lowToHigh')"
+                    href="#!"
+                    >價格由低至高</a
+                  >
                 </div>
               </div>
             </div>
@@ -52,47 +67,21 @@
       </div>
 
       <div class="row gutter-4">
-        <!-- sidebar -->
-        <aside class="col-lg-3 sidebar">
-          <!-- 價格 -->
-          <div class="widget">
-            <span
-              class="widget-collapse d-lg-none"
-              data-toggle="collapse"
-              data-target="#collapse-price"
-              aria-expanded="false"
-              aria-controls="collapse-price"
-              role="button"
-            >
-              按價格篩選
-            </span>
-            <div class="d-lg-block collapse" id="collapse-price">
-              <span class="widget-title">價格</span>
-              <div class="widget-content">
-                <input
-                  type="text"
-                  class="rangeslider"
-                  name="Range Slider"
-                  v-model="priceRange"
-                />
-              </div>
-            </div>
-          </div>
-        </aside>
-
         <!-- content -->
-        <div class="col-lg-9">
+        <div class="col-lg-12">
           <div class="row gutter-2 gutter-lg-3">
             <div
-              class="col-6 col-md-4"
-              v-for="inspiration in inspirations"
+              class="col-6 col-md-2"
+              v-for="inspiration in paginatedInspirations"
               :key="inspiration.InspirationId"
             >
               <div class="product">
                 <figure class="product-image">
-                  <a href="#!">
+                  <a
+                    :href="`${MVC_URL}/ProductPage/Customizeddetail/${inspiration.InspirationId}`"
+                  >
                     <img
-                      :src="`http://localhost:7251/images/Inspiration/${inspiration.ImageFileName}`"
+                      :src="`${IMG_URL}/Inspiration/${inspiration.ImageFileName}`"
                       alt="Image"
                     />
                   </a>
@@ -104,7 +93,9 @@
                   <div class="product-price">
                     <span>{{ inspiration.SalePrice }}元</span>
                     <span class="product-action">
-                      <a href="#!">加入購物車</a>
+                      <a @click="addInspirationToCart(inspiration)" href="#!"
+                        >加入購物車</a
+                      >
                     </span>
                   </div>
                   <a href="#!" class="product-like"></a>
@@ -116,22 +107,11 @@
             <div class="col">
               <nav class="d-inline-block">
                 <!-- pagination -->
-                <ul class="pagination">
-                  <li class="page-item active">
-                    <a class="page-link" href="#!"
-                      >1 <span class="sr-only">(current)</span></a
-                    >
-                  </li>
-                  <li class="page-item" aria-current="page">
-                    <a class="page-link" href="#!">2</a>
-                  </li>
-                  <li class="page-item">
-                    <a class="page-link" href="#!">3</a>
-                  </li>
-                  <li class="page-item">
-                    <a class="page-link" href="#!">4</a>
-                  </li>
-                </ul>
+                <Pagination
+                  :currentPage="currentPage"
+                  :totalPages="totalPages"
+                  @setCurrentPage="setCurrentPage"
+                />
               </nav>
             </div>
           </div>
@@ -139,19 +119,62 @@
       </div>
     </div>
   </section>
+
+  <!-- Bootstrap 提視窗 -->
+  <div class="modal" id="addToCartSuccess" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-body">
+          <p>成功加入購物車</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            關閉
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="addToCartFailed" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-body">
+          <p>加入購物車失敗</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            關閉
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 <script>
-var baseAddress = "http://localhost:7250";
+const API_URL = import.meta.env.VITE_API_URL;
+import Pagination from "./Pagination.vue";
+import NavbarMixin from "./Navbar.vue";
 export default {
+  mixins: [NavbarMixin],
+  components: {
+    Pagination,
+  },
   data() {
     return {
+      MVC_URL: import.meta.env.VITE_MVC_URL,
+      IMG_URL: import.meta.env.VITE_IMAGE_URL,
+      sortOption: "default",
+      inspirationsPerPage: 9,
+      currentPage: 1,
       inspirations: [],
+      memberId: "",
     };
   },
   methods: {
     async fetchInspirations() {
       try {
-        const response = await fetch(`${baseAddress}/api/Inspirations`, {
+        const response = await fetch(`${API_URL}/Inspirations`, {
           method: "GET",
         });
 
@@ -167,9 +190,63 @@ export default {
         console.log(err);
       }
     },
+    setSortOption(option) {
+      this.sortOption = option;
+    },
+    setCurrentPage(page) {
+      this.currentPage = page;
+    },
+    async addInspirationToCart(inspiration) {
+      try {
+        const response = await fetch(`${API_URL}/Carts`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            //之後要改會員id
+            cartId: 0,
+            memberId: this.memberId,
+            quantity: 1,
+            inspirationId: inspiration.InspirationId,
+          }),
+        });
+        if (response.ok) {
+          const result = await response.text();
+          console.log("成功加入購物車:", result);
+          $("#addToCartSuccess").modal("show");
+        } else {
+          $("#addToCartFailed").modal("show");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
   mounted() {
+    this.getMemberIdFromCookie();
     this.fetchInspirations();
+  },
+  computed: {
+    totalPages() {
+      return Math.ceil(this.inspirations.length / this.inspirationsPerPage);
+    },
+    paginatedInspirations() {
+      const startIndex = (this.currentPage - 1) * this.inspirationsPerPage;
+      const endIndex = startIndex + this.inspirationsPerPage;
+
+      if (this.sortOption === "highToLow") {
+        this.inspirations.sort(
+          (a, b) => parseFloat(b.SalePrice) - parseFloat(a.SalePrice)
+        );
+      } else if (this.sortOption === "lowToHigh") {
+        this.inspirations.sort(
+          (a, b) => parseFloat(a.SalePrice) - parseFloat(b.SalePrice)
+        );
+      }
+
+      return this.inspirations.slice(startIndex, endIndex);
+    },
   },
 };
 </script>
