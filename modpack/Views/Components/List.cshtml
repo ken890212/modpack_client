@@ -1,0 +1,108 @@
+﻿@model IEnumerable<modpack.DTO.ComponentsDTO>
+
+@{
+    ViewData["Title"] = "List";
+}
+
+<h1>元件一覽表</h1>
+
+@using (Html.BeginForm())
+{
+    @:搜尋 @Html.TextBox("txtKeyword", null, new { placeholder = "輸入關鍵字" })
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                序號
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Category)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StatusName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MateriaName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ColorName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OriginalPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsCustomized)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.productCategories.First().Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ImageFileName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int count = 0;
+            foreach (var item in Model)
+            {
+                count++;
+                <tr>
+                    <td>
+                        @count
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Category)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StatusName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MateriaName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ColorName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OriginalPrice)
+                    </td>
+                    <td style="text-align: center;">
+                        @Html.CheckBoxFor(modelItem => item.IsCustomized, new { disabled = "disabled" })
+                    </td>
+                    <td>
+                        @{
+                            if (item.productCategories.Count != 0)
+                            {
+                                @Html.DropDownListFor(modelItem => item.ComponentID,
+                                 new SelectList(item.productCategories, "CategoryID", "Name"),
+                                 new { @class = "form-control" })
+                            }
+                            else
+                            {
+                                @Html.DropDownListFor(modelItem => item.ComponentID,
+                                 new List<SelectListItem> { new SelectListItem { Text = "無分類" } },
+                                 new { @class = "form-control" })
+                            }
+                        }
+                    </td>
+                    <td>
+                        <img src="~/images/component/@item.ImageFileName" width="60" height="60" />
+                    </td>
+                    <td>
+                        @Html.ActionLink("修改", "Edit", "Components", new { id = item.ComponentID }, null)
+                        @Html.ActionLink("修正圖片", "ViewImage", "Components", new { id = item.ComponentID }, null)
+                        @Html.ActionLink("刪除", "Delete", "Components", new { id = item.ComponentID }, null)
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

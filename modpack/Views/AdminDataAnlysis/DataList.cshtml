@@ -1,0 +1,125 @@
+﻿@model List<modpack.ViewModels.CDataAnlysisViewModel>
+@{
+    ViewData["Title"] = "DataList";
+}
+
+<h1>數據管理</h1>
+<p>
+    <a asp-action="ChartjsBarTwo">顯示 bar 圖</a>
+    <a asp-action="ChartjsLine">顯示 line 圖</a>
+    <a asp-action="ChartjsMap">顯示 map 圖</a>
+</p>
+<hr />
+
+<h3>數據總表</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <label asp-for="@Model.First().aOrderID"></label>
+            </th>
+            <th>
+                <label asp-for="@Model.First().aOrderStatus"></label>
+            </th>
+            <th>
+                <label asp-for="@Model.First().aMember"></label>
+            </th>
+            <th>
+                <label asp-for="@Model.First().aPromoCode"></label>
+            </th>
+            <th>
+                <label asp-for="@Model.First().aShoppingCredit"></label>
+            </th>
+            <th>
+                <label asp-for="@Model.First().aShippingFee"></label>
+            </th>
+            <th>
+                <label asp-for="@Model.First().aCompletionTime"></label>
+            </th>
+            <th>
+                <label asp-for="@Model.First().aTotalPrice"></label>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int count = 0;
+            foreach (var item in Model)
+            {
+                count++;
+                <tr>
+                    <td>
+                        @count
+                        @*
+                        @Html.DisplayFor(modelItem => item.aOrderID)
+                        *@
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.aOrderStatus)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.aMember)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.aPromoCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.aShoppingCredit)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.aShippingFee)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.aCompletionTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.aTotalPrice)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.aOrderID">編輯</a> |
+                        @* 點擊后会触发 JavaScript 事件 *@
+                        <a asp-action="OrderDetails" asp-route-id="@item.aOrderID">查看詳細</a> |
+                        @* 使用带有订单ID的链接 ??? *@
+                        <a href="#" class="order-details-link" data-order-id="@item.aOrderID">查看詳細</a>
+                        <a asp-action="Delete" asp-route-id="@item.aOrderID">刪除</a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('a.order-details-link').click(function (e) {
+                e.preventDefault();
+
+                var orderId = $(this).data('order-id');
+
+                $.ajax({
+                    url: '/AdminDataAnlysis/OrderDetails/' + orderId,
+                    type: 'GET',
+                    success: function (response) {
+                        $('#orderDetailsContainer').html(response);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+            });
+        });
+    </script>
+}
+
+<!-- 容器用于显示OrderDetails视图 -->
+<div id="orderDetailsContainer"></div>
+
+<div>
+    <!-- 使用 partial view 顯示 OrderDetails 视图 -->
+    @*
+    @await Html.PartialAsync("OrderDetails", @Model.First().aOrderID)
+    *@
+</div>

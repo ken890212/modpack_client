@@ -1,0 +1,222 @@
+﻿@model IEnumerable<modpackFront.Models.ImageCarousel>
+
+@{
+    ViewData["Title"] = "ReachOut";
+}
+
+@* 更改高度樣式 *@
+<div class="container" style="padding-top:9rem">
+
+    <body>
+        <div class="row">
+            <div class="col-4">
+                <p>
+                    <strong>
+                        <span>
+                            服務電話
+                        </span>
+                    </strong>
+
+                    <br>
+                    <span>
+
+                        <span>
+                            線上購物客服(訂購問題/訂單諮詢/貨態查詢)
+                        </span>
+                    </span>
+                    <br>
+                    <span>
+                        • z00000001@gmail.com
+
+                    </span>
+                    <br>
+                    <span>
+                        • 07-0010 1000
+                    </span>
+                </p>
+
+
+                <p>
+                    <span>
+                        <span>
+                            其他服務電話
+                        </span>
+                    </span>
+                    <br>
+                    <span>
+                        • z00000001@gmail.com
+                    </span>
+                    <br>
+                    <span>
+                        • 07-0020 2000
+                    </span>
+                </p>
+
+
+                <p>
+                    <span>
+                        <strong>
+                            資訊洽詢
+                        </strong>
+                    </span>
+                    <br>
+                    <span>
+
+                        <span>
+                            南部地方辦公處
+                        </span>
+
+                        <br>
+                        <span>
+                            • 42880 臺灣市南部地區水泥路一段001號
+                        </span>
+                        <br>
+                        <span>
+                            • 07-0030 0300
+                        </span>
+                </p>
+
+
+                <p>
+                    <span>
+
+                        <span>
+                            北部地方辦公處
+                        </span>
+                    </span>
+                    <br>
+                    <span>
+                        • 0000 臺灣市北部地區水泥路一段001號
+                    </span>
+                    <br>
+                    <span>
+                        • 007-0040 0400
+                    </span>
+                </p>
+
+
+                <p>
+                    <span>
+                        <strong>
+                            聯繫時間
+                        </strong>
+                    </span>
+                    <br>
+                    <span>
+
+                        <span>
+                            週一 – 週五 09:00 ~ 12:00 / 13:00 ~ 17:00
+                        </span>
+                    </span>
+                    <br>
+                    <span>
+                        (國定例假日暫停服務)
+                    </span>
+                </p>
+
+                <p>
+                    <span>
+                        總公司
+                    </span>
+                    <br>
+                    <span>
+                        ModPack公司
+                    </span>
+                    <br>
+                </p>
+            </div>
+            <div class="col-8">
+
+                <div class="col-8">
+                    <form id="Main_Form" name="Main_Form" method="post" action="Sendout" class="addbox">
+                        <p>
+                            <span class="input-title">你的名子</span>
+                            <input type="text" id="MemberID" name="MemberID" value="" class="input-text" fun="checkNull" len="60" nullstr="ID" placeholder="MemberID">
+                            <span class="forms_show" for="Member"></span>
+                        </p>
+
+                        @* <p>
+                            問題類型:
+                            <select id="Contact_Class_ID" style="margin-left:0;" name="Contact_Class_ID" fun="checkNull" nullstr="請選擇問題類型">
+                                <option value="">請選擇</option>
+                                <option value="1">購物相關</option>
+                                <option value="2">商品詢問</option>
+                                <option value="3">銷售服務</option>
+                                <option value="4">其他</option>
+                            </select>
+                            <span class="forms_show" for="Contact_Class_ID"></span>
+                        </p> *@
+
+                        <p>
+                            <span class="Question">問題內容：</span>
+                            <textarea id="Question" name="Question" class="input-text" fun="checkNull" nullstr="請輸入問題內容" placeholder="問題內容">
+
+                </textarea>
+                            <span class="forms_show" for="Question">
+
+                            </span>
+                        </p>
+
+                        <p>
+                            <span class="QuestionTime">提問時間：</span>
+                            <textarea id="QuestionTime" class="input-text" fun="checkNull" nullstr="請輸入提問日期">
+
+                </textarea>
+                         @*  <span class="forms_show" for="Question">
+
+                            </span>
+                        </p>
+
+
+                        <p>
+                            E-mail:
+                            <input type="text" id="Email" name="Email" value="" class="input-text" fun="checkEmailNull" nullstr="請輸入e-mail" errorstr="e-mail格式錯誤" placeholder="E-mail">
+
+                        </p>
+                        <p>
+                            性別:
+                            <input type="radio" id="Sex1" name="Sex" value="1" checked="" fun="checkItems" nullstr="請選擇性別"><label for="Sex1"> 先生</label>
+                            <input type="radio" id="Sex2" name="Sex" value="2"><label for="Sex2"> 小姐</label>
+
+                        </p>
+                        <p>
+                            聯絡電話:
+                            <input type="text" id="Tel" name="Tel" class="input-text" placeholder="聯絡電話">
+                        </p>
+
+
+
+
+
+                        <p>
+                            上傳圖片：
+                            <label for="fileupload1" style="height:auto;padding:0;">
+                                <span class="btn btn-info">圖片上傳</span><span class="">(<font color="#FF0000">限jpg檔案小於2M</font>)</span>
+                                <span class="forms_show red" for="Pic_Path"></span>
+                            </label>
+                        </p>
+                        <div class="fileupload_out">
+                            <input type="file" id="fileupload1" name="Filedata" style="display:none">
+                            <input type="hidden" id="Pic_Path" name="Pic_Path" value="" fun="" nullstr="請上傳封面照片" placeholder="封面照片">
+                            <div id="fileupload-progress" class="progress">
+                                <div class="progress-bar progress-bar-warning"></div>
+                            </div>
+                            <div class="fileupload_info"></div>
+                        </div> *@
+
+
+
+                        <p class="text-center">
+                            <input class="button1 button-big" type="submit" value="送出">
+                            <input class="button3 button-big" type="reset" value="取消">
+                        </p> 
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+    </body>
+</div>
+
+

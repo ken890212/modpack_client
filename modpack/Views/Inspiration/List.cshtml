@@ -1,0 +1,65 @@
+﻿@model IEnumerable<modpack.DTO.InspirationDTO>
+
+@{
+    ViewData["Title"] = "List";
+}
+
+<h1>靈感一覽表</h1>
+@using (Html.BeginForm())
+{
+    @:搜尋 @Html.TextBox("txtKeyword", null, new { placeholder = "輸入關鍵字" })
+    <a asp-action="Create">新增</a>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                序號
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PromotionId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SalePrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ImageFileName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int count = 0;
+            foreach (var item in Model)
+            {
+                count++;
+                <tr>
+                    <td>
+                        @count
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PromotionName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SalePrice)
+                    </td>
+                    <td>
+                        <img src="~/images/Inspiration/@item.ImageFileName" width="60" height="60" />
+                    </td>
+                    <td>
+                        @Html.ActionLink("修改", "Edit", "Inspiration", new {  id = item.InspirationId }) |
+                        @Html.ActionLink("刪除", "Delete", "Inspiration", new { id = item.InspirationId })
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

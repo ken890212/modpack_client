@@ -1,0 +1,91 @@
+﻿@model IEnumerable<modpack.ViewModels.CImageCarouselViewModel>
+@{
+    ViewData["Title"] = "List";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - 輪播管理</title>
+    <style>
+        #imageCarousel {
+            width: 200px;
+            height: 150px;
+            background-color: lightblue;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>輪播管理</h1>
+    <div id="imageCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            @foreach (var item in Model)
+            {
+                <div class="carousel-item @(item == Model.First() ? "active" : "")">
+                    <h5>@item.aImageDescription</h5>
+                    <img src="~/images/carousel/@item.aImageFile" class="d-block w-100" alt="@item.aImageDescription">
+                </div>
+            }
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#imageCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">上一個</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#imageCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">下一個</span>
+        </button>
+    </div>
+    <hr />
+    <p><a asp-action="Create">新增資料</a></p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    <label asp-for="@Model.First().aImageCarouselID"></label>
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.aImageFile)
+                </th>
+                <th>
+                    <label asp-for="@Model.First().aImageDescription"></label>
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.aImageCarouselID)
+                    </td>
+                    <td>
+                        @*@Html.DisplayFor(modelItem => item.FImagePath)*@
+                        <img src="~/images/carousel/@item.aImageFile" width="80" height="60" />
+                        (示例性瀏覽檔名：@Html.DisplayFor(modelItem => item.aImageFile))
+                    </td>
+                    <th>
+                        @Html.DisplayFor(modelItem => item.aImageDescription)
+                    </th>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.aImageCarouselID">編輯</a> |
+                        <a asp-action="Details" asp-route-id="@item.aImageCarouselID">詳情</a> |
+                        <a asp-action="Delete" asp-route-id="@item.aImageCarouselID">刪除</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    @section Scripts {
+        <script>
+            var myCarousel = new bootstrap.Carousel(document.getElementById('imageCarousel'), {
+                interval: 5000 // 播放速度
+            });
+        </script>
+    }
+</body>
+</html>

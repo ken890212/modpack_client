@@ -1,0 +1,113 @@
+﻿@model modpackFront.DTO.MemberDTO
+
+@{
+    ViewData["Title"] = "會員資料編輯";
+}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
+    <link rel="stylesheet" href="~/assets/css/vendor.css">
+    <link rel="stylesheet" href="~/assets/css/style.css">
+    <title>@ViewData["Title"]</title>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'UA-121642637-4');
+    </script>
+</head>
+<body>
+    <!-- 會員資料標題 -->
+    <section class="hero hero-small bg-purple text-white">
+        <div class="container">
+            <div class="row gutter-2 gutter-md-4 align-items-end">
+                <div class="col-md-6 text-center text-md-left">
+                    <h1 class="mb-0">@Html.DisplayFor(model => model.Name)</h1>
+                    <span class="text-muted">@Html.DisplayFor(model => model.LevelName)</span>
+                </div>
+                <!-- 會員編輯btn -->
+                <div class="col-md-6 text-center text-md-right">
+                    <a asp-action="Profile" class="btn btn-sm btn-outline-white">返回</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- 左邊選單 -->
+    <section class="pt-5">
+        <div class="container">
+            <div class="row gutter-4 justify-content-between">
+                <aside class="col-lg-3">
+                    <div class="nav nav-pills flex-column lavalamp" id="sidebar-1" role="tablist">
+                        <a class="nav-link active" data-toggle="tab" href="#sidebar-1-1" role="tab" aria-controls="sidebar-1" aria-selected="true">基本資料</a>
+                        <a class="nav-link" data-toggle="tab" href="#sidebar-1-2" role="tab" aria-controls="sidebar-1-2" aria-selected="false">訂單</a>
+                        <a class="nav-link" data-toggle="tab" href="#sidebar-1-5" role="tab" aria-controls="sidebar-1-5" aria-selected="false">收藏</a>
+                    </div>
+                </aside>
+
+                <div class="col-lg-9">
+
+                    <!-- 會員資料 -->
+                    <form asp-action="Edit" asp-controller="UserProfile" method="post">
+                        <div class="col-lg-9">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="tab-content" id="myTabContent">
+                                        <!-- profile -->
+                                        <div class="tab-pane fade show active" id="sidebar-1-1" role="tabpanel" aria-labelledby="sidebar-1-1">
+                                            <div class="row mb-2">
+                                                <div class="col-12">
+                                                    <h3>編輯個人資訊</h3>
+                                                </div>
+                                            </div>
+                                            <div class="row gutter-1">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <input asp-for="@Model.id" type="hidden" />
+                                                        <label for="name">會員名稱</label>
+                                                        <input id="name" name="Name" type="text" class="form-control" value="@Model.Name">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="phone">電話</label>
+                                                        <input id="phone" name="Phone" type="text" class="form-control" value="@Model.Phone">
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="form-group">
+                                                        <label for="address">地址</label>
+                                                        <input id="address" name="Address" type="text" class="form-control" value="@Model.Address">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="email">電子信箱</label>
+                                                        <input id="email" name="Email" type="email" class="form-control" value="@Model.Email">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+
+                                                    <button type="submit" class="btn btn-primary">儲存</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+
+                </div>
+            </div>
+    </section>
+
+    <script src="~/assets/js/vendor.min.js"></script>
+    <script src="~/assets/js/app.js"></script>
+</body>
+</html>

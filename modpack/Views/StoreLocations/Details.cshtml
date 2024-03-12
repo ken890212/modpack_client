@@ -1,0 +1,41 @@
+﻿@model modpack.Models.StoreLocation
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4></h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name) @Html.DisplayName("門市")
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.OfficeTelephone) @Html.DisplayName("服務電話")
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.OfficeTelephone)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Address) @Html.DisplayName("商店地址")
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Address)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.StoreLocationId">Edit</a>
+
+    |
+
+    <button type="button" class="btn btn-info" style="background-color: #9bfab6; border: none; color: white;">
+        <a asp-action="Index">回到目錄</a>
+    </button>
+</div>
