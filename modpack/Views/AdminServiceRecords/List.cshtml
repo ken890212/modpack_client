@@ -1,0 +1,95 @@
+﻿@model IEnumerable<modpack.ViewModels.CServiceRecordsViewModel>
+@using X.PagedList.Mvc.Core
+@using X.PagedList
+@{
+    ViewData["Title"] = "List";
+}
+
+<h1>客服管理</h1>
+<hr />
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                序
+                @*@Html.DisplayNameFor(model => model.aRecordID)*@
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.aMemberID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.aMemberName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.aQuestionContent)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.aQuestionTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.aAdminCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.aAdminName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.aAnswerContent)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.aAnswerTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.aIsResolved)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int count = 0;
+            foreach (var item in Model)
+            {
+                count++;
+                <tr>
+                    <td>
+                        @count
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.aMemberID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.aMemberName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.aQuestionContent)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.aQuestionTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.aAdminCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.aAdminName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.aAnswerContent)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.aAnswerTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.aIsResolved)
+                    </td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.aRecordID">檢視</a> |
+                        <a asp-action="Edit" asp-route-id="@item.aRecordID">編輯</a> |
+                        <a asp-action="ReplyTwo" asp-route-id="@item.aRecordID">回覆</a> |
+                        <a asp-action="Delete" asp-route-id="@item.aRecordID">刪除</a> |
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+@Html.PagedListPager((IPagedList)Model, x => Url.Action("List", new { page = x }))

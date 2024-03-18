@@ -1,0 +1,306 @@
+﻿@model IEnumerable<modpack.ViewModels.CServiceRecordsViewModel>
+
+<h1>回覆</h1>
+<p><a asp-action="List">回到列表</a></p>
+<hr />
+<div class="serviceRoom">
+    <div class="chat-top friend">
+        <div class="control">
+            <span class="arrow"></span>
+            @* <span>Chat</span> *@
+        </div>
+        <div class="name">
+            <h3>@ViewData["CurrentMemberId"]</h3>
+            <p>@ViewData["CurrentMemberName"]</p>
+        </div>
+        <div class="profile">
+            <img src="" alt="" class="icon" />
+        </div>
+    </div>
+
+    <div class="chat-mid">
+        @* <div class="chat">
+        <div class="chatbox left">
+        <div class="profile">
+        <img src="" alt="" class="icon" />
+        </div>
+        <div class="message">
+        <p>(提問)</p>
+        </div>
+        </div>
+        </div>
+        <div class="chat">
+        <div class="chatbox right">
+        <div class="profile">
+        <img src="" alt="" class="icon" />
+        </div>
+        <div class="message">
+        <p>(回復)</p>
+        </div>
+        </div>
+        </div> *@
+
+        @foreach (var item in Model)
+        {
+            <div class="chat">
+                <div class="chatbox left">
+                    <div class="profile">
+                        <img src="" alt="" class="icon" />
+                    </div>
+                    <div class="message-right">
+                        <div class="message">
+                            <p>@item.aQuestionContent</p>
+                        </div>
+                        <span class="time">@item.aQuestionTime</span>
+                    </div>
+                </div>
+            </div>
+            <div class="chat">
+                <div class="chatbox right">
+                    <div class="profile">
+                        <img src="" alt="" class="icon" />
+                    </div>
+                    <div class="message-right">
+                        <div class="message">
+                            <p>@item.aAnswerContent</p>
+                        </div>
+                        <span class="time">@item.aAnswerTime</span>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="inputbox chat-bottom">
+        <form>
+            <div class="input-container">
+                <textarea name="message" placeholder="..."></textarea>
+                <span>+</span>
+            </div>
+            <div class="button-container">
+                <button class="btn btn-info clearBtn" type="button">清除內容</button>
+                <button class="btn btn-info submitBtn" type="submit">送出</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100vh;
+            background: #f48f8b;
+        }
+
+        .icon {
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .serviceRoom {
+            width: 500px;
+            margin: 30px auto 0;
+            background: rgba(255, 255, 255, 0.85);
+            display: flex;
+            flex-direction: column;
+            padding: 0 0 30px;
+            border-radius: 5px;
+            box-shadow: 2px 2px 6px 2px rgba(43, 43, 43, 0.5);
+        }
+
+            .serviceRoom .chat-top {
+                background: #f2f2f2;
+                padding-top: 10px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+                .serviceRoom .chat-top .name h3 {
+                    letter-spacing: 0.15rem;
+                    font-weight: 400;
+                    font-size: 1rem;
+                }
+
+                .serviceRoom .chat-top .control span {
+                    color: #72a3d4;
+                    cursor: pointer;
+                }
+
+
+                .serviceRoom .chat-top .control:hover span,
+                .serviceRoom .chat-top .control:hover span::before {
+                    color: #31356c;
+                }
+
+                .serviceRoom .chat-top .profile img {
+                    margin: auto;
+                }
+
+            .serviceRoom .chat-mid {
+                padding: 20px 20px 50px;
+                background-image: url();
+                background-color: lightgoldenrodyellow;
+                height: 100%;
+            }
+
+                .serviceRoom .chat-mid .chat {
+                    display: grid;
+                    grid-template-columns: 50px 360px 50px;
+                }
+
+                    .serviceRoom .chat-mid .chat .chatbox {
+                        display: flex;
+                        align-items: center;
+                        position: relative;
+                    }
+
+
+                        .serviceRoom .chat-mid .chat .chatbox .message-right .message {
+                            padding: 1px 10px;
+                            border-radius: 25px;
+                            background: white;
+                            position: relative;
+                            box-shadow: 1px 2px 3px 1px rgba(43, 43, 43, 0.3);
+                        }
+
+                            .serviceRoom .chat-mid .chat .chatbox .message-right .message::before {
+                                content: '';
+                                position: absolute;
+                                width: 10px;
+                                height: 2px;
+                            }
+
+                    .serviceRoom .chat-mid .chat .left {
+                        grid-column: 1/3;
+                    }
+
+                        .serviceRoom .chat-mid .chat .left .message-right .message {
+                            margin-left: 10px;
+                            border-left-color: transparent;
+                        }
+
+                            .serviceRoom .chat-mid .chat .left .message-right .message::before {
+                                top: 50%;
+                                left: -12px;
+                                transform: translateY(-50%);
+                                border: 7px solid transparent;
+                                border-right-color: white;
+                            }
+
+                        .serviceRoom .chat-mid .chat .left .message-right .time {
+                            display: block;
+                            float: left;
+                            clear: both;
+                            margin-top: 5px; /* 调整上下边距 */
+                            margin-left: 5px; /* 调整左边距 */
+                        }
+
+                    .serviceRoom .chat-mid .chat .right {
+                        grid-column: 2/-1;
+                        justify-self: end;
+                    }
+
+                        .serviceRoom .chat-mid .chat .right .profile {
+                            order: 2;
+                        }
+
+                        .serviceRoom .chat-mid .chat .right .message-right .message {
+                            margin-right: 10px;
+                            border-right-color: transparent;
+                        }
+
+                            .serviceRoom .chat-mid .chat .right .message-right .message::before {
+                                top: 50%;
+                                right: -12px;
+                                transform: translateY(-50%);
+                                border: 7px solid transparent;
+                                border-left-color: white;
+                            }
+
+
+            .serviceRoom .chat-bottom {
+                padding: 20px 20px 0px;
+                background-color: darkgray;
+            }
+
+                .serviceRoom .chat-bottom form {
+                    display: flex;
+                    align-items: flex-start; /* 讓內容向上對齊 */
+                }
+
+                    .serviceRoom .chat-bottom form .input-container {
+                        display: flex;
+                        align-items: center; /* 讓內容垂直居中 */
+                        margin-right: 10px; /* 確保左側輸入框和加號之間有一定的間距 */
+                    }
+
+                        .serviceRoom .chat-bottom form .input-container textarea {
+                            outline: none;
+                            border: 1px solid transparent;
+                            border-bottom-color: #e2e2e2;
+                            padding: 0 15px;
+                            height: 100%; /* 設置輸入框高度與右側按鈕組相同 */
+                        }
+
+                        .serviceRoom .chat-bottom form .input-container span {
+                            background: rgba(226, 226, 226, 0.9);
+                            padding: 5px 10px;
+                            border-radius: 50%;
+                            cursor: pointer;
+                        }
+
+                    .serviceRoom .chat-bottom form .button-container {
+                        display: flex;
+                        flex-direction: column; /* 將按鈕組垂直排列 */
+                        align-items: flex-start; /* 將按鈕組左對齊 */
+                    }
+
+                        .serviceRoom .chat-bottom form .button-container button {
+                            margin-top: 10px; /* 確保按鈕之間有一定的間距 */
+                        }
+    </style>
+}
+
+@section Scripts {
+    <script src="~/lib/signalr/dist/browser/signalr.min.js"></script>
+    <script>
+        // .clearBtn 清空内容
+        document.querySelector('.clearBtn').addEventListener('click', function () {
+            document.getElementById('message').value = '';
+        });
+
+        // 监听 DisplayQuestion 事件，并将收到的问题显示在界面上。
+        var connection = new signalR.HubConnectionBuilder().withUrl("/service/serviceHub").build();
+        connection.start().then(function () {
+            console.log("SignalR 連接已建立");
+        }).catch(function (err) {
+            return console.error(err.toString());
+        });
+
+        connection.on("DisplayQuestion", function (questionData) {
+            // 在后台客服界面上显示会员 ID 内容和时间
+            // 假设你有一个用于显示问题的元素，例如 <div id="question-container"></div>
+            var questionContainer = document.getElementById("question-container");
+            var questionHtml = "<p>會員ID: " + questionData.memberId + "</p>";
+            questionHtml += "<p>問題內容: " + questionData.questionContent + "</p>";
+            questionHtml += "<p>問題時間: " + questionData.questionTime + "</p>";
+
+            // 将问题内容添加到问题容器中
+            questionContainer.innerHTML = questionHtml;
+        });
+    </script>
+}   @*這是後端專案的view*@

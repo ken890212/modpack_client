@@ -1,0 +1,68 @@
+﻿@model IEnumerable<modpack.DTO.CustomizedDTO>
+
+@{
+    ViewData["Title"] = "List";
+}
+
+<h1>客製化一覽表</h1>
+@using (Html.BeginForm())
+{
+    @:搜尋 @Html.TextBox("txtKeyword", null, new { placeholder = "輸入關鍵字" })
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                序號
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MemberId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PromotionId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SalePrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ImageFileName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int count = 0;
+            foreach (var item in Model)
+            {
+                count++;
+                <tr>
+                    <td>
+                        @count
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MemberName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PromotionName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SalePrice)
+                    </td>
+                    <td>
+                        <img src="~/images/Customized/@item.ImageFileName" width="60" height="60" />
+                    </td>
+                    <td>
+                        @Html.ActionLink("檢視圖片", "ViewImage", "Customized", new { id = item.CustomizedId })
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

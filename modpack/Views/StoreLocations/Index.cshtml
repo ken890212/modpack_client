@@ -1,0 +1,54 @@
+﻿@model IEnumerable<modpack.Models.StoreLocation>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>門市位置表</h1>
+
+<p>
+    <button type="button" class="btn btn-info" style="background-color: #92d7fc; border: none; color: white;">
+        <a asp-action="Create">新增門市位置</a>
+    </button>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model) @Html.DisplayName("門市")
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model) @Html.DisplayName("服務電話")
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model) @Html.DisplayName("商店地址")
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OfficeTelephone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+
+                    <button type="button" class="btn btn-info" style="background-color: #78e6eb; border: none; color: white;">
+                        <a asp-action="Edit" asp-route-id="@item.StoreLocationId">編輯</a>
+                    </button>
+
+                    <button type="button" class="btn btn-danger" style="background-color: #f7a3a3; border: none; color: white;">
+                        <a asp-action="Delete" asp-route-id="@item.StoreLocationId">刪除</a>
+                    </button>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
